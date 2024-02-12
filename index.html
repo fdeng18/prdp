@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="PRDP achieves stable black-box reward finetuning for diffusion models for the first time on large-scale prompt datasets with over 100K prompts, leading to superior generation quality on complex, unseen prompts."
+    />
+    <meta
+      name="keywords"
+      content="PRDP, Proximal Reward Difference Prediction, diffusion models, Stable Diffusion, alignment, human preference, reward finetuning, large scale, reinforcement learning, RLHF, DDPO, DPOK, DPO, PPO"
+    />
+    <title>PRDP</title>
+
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+    />
+    <link rel="stylesheet" href="./static/css/bulma.min.css" />
+    <link rel="stylesheet" href="./static/css/bulma-carousel.min.css" />
+    <link rel="stylesheet" href="./static/css/fontawesome.all.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css"
+    />
+    <link rel="stylesheet" href="./static/css/index.css" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script defer src="./static/js/fontawesome.all.min.js"></script>
+    <script src="./static/js/bulma-carousel.min.js"></script>
+    <script src="./static/js/index.js"></script>
+  </head>
+  <body>
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <div class="columns is-centered">
+            <div class="column has-text-centered">
+              <h1 class="title is-3 publication-title">
+                PRDP: Proximal Reward Difference Prediction<br />
+                for Large-Scale Reward Finetuning of Diffusion Models
+              </h1>
+              <div class="is-size-4 publication-authors">
+                <span class="author-block">
+                  <a
+                    href="https://scholar.google.com/citations?hl=en&user=F-V72fUAAAAJ&view_op=list_works&sortby=pubdate"
+                    >Fei Deng</a
+                  ><sup>1,2</sup>,
+                </span>
+                <span class="author-block">
+                  <a href="https://research.google/people/qifei-wang/"
+                    >Qifei Wang</a
+                  ><sup>1</sup>,
+                </span>
+                <span class="author-block">
+                  <a href="http://www.weiwei.one/">Wei Wei</a><sup>3</sup>,
+                </span>
+                <span class="author-block">
+                  <a href="https://research.google/people/matthias-grundmann/"
+                    >Matthias Grundmann</a
+                  ><sup>1</sup>,
+                </span>
+                <span class="author-block">
+                  <a href="https://tbhou.github.io/">Tingbo Hou</a><sup>1</sup>
+                </span>
+              </div>
+
+              <div class="is-size-4 publication-authors">
+                <span class="author-block"><sup>1</sup>Google,</span>
+                <span class="author-block"
+                  ><sup>2</sup>Rutgers University,
+                </span>
+                <span class="author-block"><sup>3</sup>Accenture</span>
+              </div>
+
+              <div class="column has-text-centered">
+                <div class="publication-links">
+                  <span class="link-block">
+                    <a
+                      href=""
+                      class="external-link button is-normal is-rounded is-dark"
+                    >
+                      <span class="icon">
+                        <i class="ai ai-arxiv"></i>
+                      </span>
+                      <span>arXiv</span>
+                    </a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero teaser">
+      <div class="container is-max-desktop">
+        <div class="hero-body">
+          <div id="teaser-carousel" class="carousel results-carousel">
+            <div class="item">
+              <video
+                poster=""
+                id="teaser-1"
+                autoplay
+                muted
+                loop
+                playsinline
+                height="100%"
+              >
+                <source src="./static/videos/teaser_1.mp4" type="video/mp4" />
+              </video>
+            </div>
+            <div class="item">
+              <video
+                poster=""
+                id="teaser-2"
+                autoplay
+                muted
+                loop
+                playsinline
+                height="100%"
+              >
+                <source src="./static/videos/teaser_2.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+          <div
+            class="content is-size-5 has-text-justified has-text-weight-semibold has-text-black"
+          >
+            <p>
+              <br />
+              PRDP achieves stable black-box reward finetuning for diffusion
+              models for the first time on large-scale prompt datasets with over
+              100K prompts, leading to superior generation quality on complex,
+              unseen prompts.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <!-- Abstract. -->
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-max-desktop">
+            <h2 class="title is-3">Abstract</h2>
+            <div class="content is-size-5 has-text-justified">
+              <p>
+                Reward finetuning has emerged as a promising approach to
+                aligning foundation models with downstream objectives.
+                Remarkable success has been achieved in the language domain by
+                using reinforcement learning (RL) to maximize rewards that
+                reflect human preference. However, in the vision domain,
+                existing RL-based reward finetuning methods are limited by their
+                instability in large-scale training, rendering them incapable of
+                generalizing to complex, unseen prompts. In this paper, we
+                propose Proximal Reward Difference Prediction (PRDP), enabling
+                stable black-box reward finetuning for diffusion models for the
+                first time on large-scale prompt datasets with over 100K
+                prompts. Our key innovation is the Reward Difference Prediction
+                (RDP) objective that has the same optimal solution as the RL
+                objective while enjoying better training stability.
+                Specifically, the RDP objective is a supervised regression
+                objective that tasks the diffusion model with predicting the
+                reward difference of generated image pairs from their denoising
+                trajectories. We theoretically prove that the diffusion model
+                that obtains perfect reward difference prediction is exactly the
+                maximizer of the RL objective. We further develop an online
+                algorithm with proximal updates to stably optimize the RDP
+                objective. In experiments, we demonstrate that PRDP can match
+                the reward maximization ability of well-established RL-based
+                methods in small-scale training. Furthermore, through
+                large-scale training on text prompts from the Human Preference
+                Dataset v2 and the Pick-a-Pic v1 dataset, PRDP achieves superior
+                generation quality on a diverse set of complex, unseen prompts
+                whereas RL-based methods completely fail.
+              </p>
+            </div>
+          </div>
+        </div>
+        <!--/ Abstract. -->
+      </div>
+    </section>
+
+    <hr />
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <!-- Method. -->
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-max-desktop">
+            <h2 class="title is-3">Method</h2>
+            <img src="./static/images/prdp.png" />
+            <div class="content is-size-5 has-text-justified">
+              <p>
+                <br />
+                PRDP mitigates the instability of policy gradient methods by
+                converting the RLHF objective to an equivalent supervised
+                regression objective. Specifically, given a text prompt, PRDP
+                samples two images, and tasks the diffusion model with
+                predicting the reward difference of these two images from their
+                denoising trajectories. The diffusion model is updated by
+                stochastic gradient descent on the MSE loss that measures the
+                prediction error. We prove that the MSE loss and the RLHF
+                objective have the same optimal solution.
+              </p>
+            </div>
+          </div>
+        </div>
+        <!--/ Method. -->
+      </div>
+    </section>
+
+    <hr />
+
+    <section class="section">
+      <div class="container is-max-desktop">
+        <!-- Results. -->
+        <div class="columns is-centered has-text-centered">
+          <div class="column is-max-desktop">
+            <h2 class="title is-3">Generation Samples on Unseen Prompts</h2>
+          </div>
+        </div>
+
+        <div class="hero-body">
+          <div
+            id="pick-a-pic-carousel"
+            class="autoplay-carousel results-carousel"
+          >
+            <div class="item">
+              <img src="./static/images/pick_a_pic/1.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/pick_a_pic/2.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/pick_a_pic/3.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/pick_a_pic/4.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/pick_a_pic/5.png" />
+            </div>
+          </div>
+          <div class="columns is-centered has-text-centered">
+            <div class="column is-max-desktop">
+              <h3 class="title is-4">Pick-a-Pic v1 Test</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-body">
+          <div
+            id="animation-carousel"
+            class="autoplay-carousel results-carousel"
+          >
+            <div class="item">
+              <img src="./static/images/animation/1.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/animation/2.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/animation/3.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/animation/4.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/animation/5.png" />
+            </div>
+          </div>
+          <div class="columns is-centered has-text-centered">
+            <div class="column is-max-desktop">
+              <h3 class="title is-4">Human Preference Dataset v2 Animation</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-body">
+          <div
+            id="concept-art-carousel"
+            class="autoplay-carousel results-carousel"
+          >
+            <div class="item">
+              <img src="./static/images/concept_art/1.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/concept_art/2.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/concept_art/3.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/concept_art/4.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/concept_art/5.png" />
+            </div>
+          </div>
+          <div class="columns is-centered has-text-centered">
+            <div class="column is-max-desktop">
+              <h3 class="title is-4">
+                Human Preference Dataset v2 Concept Art
+              </h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-body">
+          <div
+            id="painting-carousel"
+            class="autoplay-carousel results-carousel"
+          >
+            <div class="item">
+              <img src="./static/images/painting/1.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/painting/2.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/painting/3.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/painting/4.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/painting/5.png" />
+            </div>
+          </div>
+          <div class="columns is-centered has-text-centered">
+            <div class="column is-max-desktop">
+              <h3 class="title is-4">Human Preference Dataset v2 Painting</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-body">
+          <div id="photo-carousel" class="autoplay-carousel results-carousel">
+            <div class="item">
+              <img src="./static/images/photo/1.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/photo/2.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/photo/3.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/photo/4.png" />
+            </div>
+            <div class="item">
+              <img src="./static/images/photo/5.png" />
+            </div>
+          </div>
+          <div class="columns is-centered has-text-centered">
+            <div class="column is-max-desktop">
+              <h3 class="title is-4">Human Preference Dataset v2 Photo</h3>
+            </div>
+          </div>
+        </div>
+        <!--/ Results. -->
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="columns is-centered">
+          <p>
+            This website is based on the
+            <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>
+            template, licensed under a
+            <a
+              rel="license"
+              href="http://creativecommons.org/licenses/by-sa/4.0/"
+              >Creative Commons Attribution-ShareAlike 4.0 International
+              License</a
+            >.
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
